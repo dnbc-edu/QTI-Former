@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QTI Transformer - DOCX to Canvas LMS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./src/style.css">
+    <!-- MathJax for rendering MathML extracted from OMML -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  </head>
+  <body>
+    <div class="app-container">
+      <header class="hero">
+        <h1>QTI Transformer</h1>
+        <p>Convert your Word Document (DOCX) quizzes into Canvas LMS compatible QTI 1.2 zip packages, entirely in your browser.</p>
+      </header>
+
+      <main class="main-content">
+        <section class="upload-section">
+          <div class="dropzone" id="dropzone">
+            <div class="dropzone-content">
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="upload-icon"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
+              <h3>Drag & Drop your DOCX file here</h3>
+              <p>or click to browse</p>
+            </div>
+            <input type="file" id="fileInput" accept=".docx" hidden>
+          </div>
+          <div id="fileInfo" class="file-info hidden">
+            <span id="fileName" class="file-name"></span>
+            <button id="removeFile" class="btn-icon" title="Remove file">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+          </div>
+        </section>
+
+
+        
+        <section class="preview-section hidden" id="previewSection">
+            <div class="section-header" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <h2>Parsed Questions</h2>
+                    <span class="badge" id="questionCount">0</span>
+                </div>
+                <div class="export-actions" style="margin-top: 0;">
+                    <button id="exportBtn" class="btn btn-success" disabled>Download QTI Package</button>
+                </div>
+            </div>
+            
+            <div class="preview-container" id="previewContainer">
+                <!-- Parsed questions will be injected here -->
+            </div>
+            
+            <div id="debugSection" class="hidden" style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
+                <details>
+                    <summary style="cursor: pointer; font-weight: 600; color: var(--text-muted);">View Raw HTML (For Debugging)</summary>
+                    <textarea id="debugHtml" style="width: 100%; height: 200px; margin-top: 1rem; font-family: monospace; font-size: 0.875rem; padding: 0.5rem; border: 1px solid var(--border-color); border-radius: var(--radius-md);" readonly></textarea>
+                </details>
+            </div>
+        </section>
+
+      </main>
+      
+      <footer>
+        <p>Built for GitHub Pages. All processing happens securely in your browser.</p>
+      </footer>
+    </div>
+    
+    <div id="toast" class="toast hidden">
+        <span id="toastMessage"></span>
+    </div>
+
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>
