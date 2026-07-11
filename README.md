@@ -1,6 +1,6 @@
-# QTI Transformer
+# QTI-Former
 
-QTI Transformer is a completely client-side browser tool that converts standard Word Documents (.docx) into Canvas LMS compatible QTI 1.2 zip packages.
+QTI-Former is a completely client-side browser tool that converts standard Word Documents (.docx) into Canvas LMS compatible QTI 1.2 zip packages.
 
 ## Features
 - **100% Client-Side**: All parsing and packaging happens securely in your browser. No server required.
