@@ -24,20 +24,42 @@
       </header>
 
       <main class="main-content">
-        <section class="upload-section">
+        <section class="upload-section" id="uploadSection">
           <div class="dropzone" id="dropzone">
-            <div class="dropzone-content">
-              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="upload-icon"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
-              <h3>Drag & Drop your DOCX file here</h3>
-              <p>or click to browse</p>
+            <div class="upload-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
             </div>
-            <input type="file" id="fileInput" accept=".docx" hidden>
+            <h3>Upload your DOCX file</h3>
+            <p>Drag & drop or click to browse</p>
+            <input type="file" id="fileInput" accept=".docx" class="hidden">
           </div>
-          <div id="fileInfo" class="file-info hidden">
-            <span id="fileName" class="file-name"></span>
-            <button id="removeFile" class="btn-icon" title="Remove file">
+          
+          <div class="file-info hidden" id="fileInfo">
+            <span class="file-name" id="fileName">document.docx</span>
+            <button class="btn-icon" id="removeFile" title="Remove file">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
             </button>
+          </div>
+        </section>
+
+        <section class="instructions-section" id="instructionsSection">
+          <h2>How to Use QTI-Former</h2>
+          <div class="instructions-grid">
+            <div class="step-card">
+              <div class="step-number">1</div>
+              <h3>Format Your Document</h3>
+              <p>Write questions as normal paragraphs. List options below them. <strong>Mark the correct answer</strong> by making it bold, italic, prefixing with <code>*</code>, or adding <code>{{ANS}}</code>.</p>
+            </div>
+            <div class="step-card">
+              <div class="step-number">2</div>
+              <h3>Review & Edit</h3>
+              <p>Drag and drop your <code>.docx</code> file above. Review the parsed questions interactively. Click text to fix typos and use the radio buttons to adjust correct answers.</p>
+            </div>
+            <div class="step-card">
+              <div class="step-number">3</div>
+              <h3>Import to Canvas</h3>
+              <p>Click Download, then go to your Canvas Course > <strong>Settings > Import Course Content</strong>. Select <strong>QTI .zip file</strong> and upload your new package!</p>
+            </div>
           </div>
         </section>
 

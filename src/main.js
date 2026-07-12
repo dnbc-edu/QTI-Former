@@ -11,6 +11,7 @@ const fileInfo = document.getElementById('fileInfo');
 const fileNameDisplay = document.getElementById('fileName');
 const removeFileBtn = document.getElementById('removeFile');
 const previewSection = document.getElementById('previewSection');
+const instructionsSection = document.getElementById('instructionsSection');
 const previewContainer = document.getElementById('previewContainer');
 const questionCountDisplay = document.getElementById('questionCount');
 const exportBtn = document.getElementById('exportBtn');
@@ -59,6 +60,7 @@ function handleFileSelect(file) {
         currentFile = file;
         fileNameDisplay.textContent = file.name;
         dropzone.classList.add('hidden');
+        instructionsSection.classList.add('hidden');
         fileInfo.classList.remove('hidden');
         previewSection.classList.add('hidden');
         parsedQuestions = [];
@@ -75,6 +77,7 @@ function resetState() {
     parsedQuestions = [];
     fileInput.value = '';
     dropzone.classList.remove('hidden');
+    instructionsSection.classList.remove('hidden');
     fileInfo.classList.add('hidden');
     previewSection.classList.add('hidden');
 }
