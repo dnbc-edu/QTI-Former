@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QTI-Former | DOCX to Canvas XML</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Google AdSense -->
+    <meta name="google-adsense-account" content="ca-pub-2781323856416463">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2781323856416463" crossorigin="anonymous"></script>
+    <!-- MathJax for rendering MathML extracted from OMML -->
+    <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script type="module" crossorigin src="/QTI-Former/assets/index-BFjUvwYC.js"></script>
+    <link rel="stylesheet" crossorigin href="/QTI-Former/assets/index-C9QJW9zv.css">
+  </head>
+  <body>
+    <div class="app-container">
+      <header class="hero" style="display: flex; flex-direction: column; align-items: center;">
+        <h1>QTI-Former</h1>
+        <p>Drag and drop your DOCX file to automatically convert it into a Canvas-compatible QTI 1.2 zip package, completely in your browser.</p>
+        <a href="/QTI-Former/QTI-Former-Sample.docx" download class="btn btn-secondary" style="display: inline-flex; align-items: center; gap: 0.5rem; margin-top: 1.5rem; text-decoration: none; font-size: 0.95rem; padding: 0.6rem 1.2rem; border: 1px solid var(--border-color); border-radius: var(--radius-md); color: var(--text-main); background: white;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          Download Sample Template
+        </a>
+      </header>
+
+      <main class="main-content">
+        <section class="upload-section" id="uploadSection">
+          <div class="dropzone" id="dropzone">
+            <div class="upload-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+            </div>
+            <h3>Upload your DOCX file</h3>
+            <p>Drag & drop or click to browse</p>
+            <input type="file" id="fileInput" accept=".docx" class="hidden">
+          </div>
+          
+          <div class="file-info hidden" id="fileInfo">
+            <span class="file-name" id="fileName">document.docx</span>
+            <button class="btn-icon" id="removeFile" title="Remove file">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+          </div>
+        </section>
+
+        <section class="instructions-section" id="instructionsSection">
+          <h2>How to Use QTI-Former</h2>
+          <div class="instructions-grid">
+            <div class="step-card">
+              <div class="step-number">1</div>
+              <h3>Format Your Document</h3>
+              <p>Write questions as normal paragraphs. List options below them. <strong>Mark the correct answer</strong> by making it bold, italic, prefixing with <code>*</code>, or adding <code>{{ANS}}</code>.</p>
+            </div>
+            <div class="step-card">
+              <div class="step-number">2</div>
+              <h3>Review & Edit</h3>
+              <p>Drag and drop your <code>.docx</code> file above. Review the parsed questions interactively. Click text to fix typos and use the radio buttons to adjust correct answers.</p>
+            </div>
+            <div class="step-card">
+              <div class="step-number">3</div>
+              <h3>Import to Canvas</h3>
+              <p>Click Download, then go to your Canvas Course > <strong>Settings > Import Course Content</strong>. Select <strong>QTI .zip file</strong> and upload your new package!</p>
+            </div>
+          </div>
+        </section>
+
+
+        
+        <section class="preview-section hidden" id="previewSection">
+            <div class="section-header" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <h2>Parsed Questions</h2>
+                    <span class="badge" id="questionCount">0</span>
+                </div>
+                <div class="export-actions" style="margin-top: 0;">
+                    <button id="exportBtn" class="btn btn-success" disabled>Download QTI Package</button>
+                </div>
+            </div>
+            
+            <div class="preview-container" id="previewContainer">
+                <!-- Parsed questions will be injected here -->
+            </div>
+            
+            <div id="debugSection" class="hidden" style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
+                <details>
+                    <summary style="cursor: pointer; font-weight: 600; color: var(--text-muted);">View Raw HTML (For Debugging)</summary>
+                    <textarea id="debugHtml" style="width: 100%; height: 200px; margin-top: 1rem; font-family: monospace; font-size: 0.875rem; padding: 0.5rem; border: 1px solid var(--border-color); border-radius: var(--radius-md);" readonly></textarea>
+                </details>
+            </div>
+        </section>
+
+      </main>
+      
+      <footer>
+        <p>QTI-Former uses client-side processing. Your files are not uploaded to any server.</p>
+        <p style="margin-top: 0.5rem; font-size: 0.8rem;">&copy; 2026 Dhon Niño Canela. Released under the <a href="https://github.com/dnbc-edu/QTI-Former/blob/main/LICENSE" target="_blank" style="color: var(--primary-color); text-decoration: none;">MIT License</a>.</p>
+      </footer>
+    </div>
+    
+    <div id="toast" class="toast hidden">
+        <span id="toastMessage"></span>
+    </div>
+
+  </body>
+</html>
