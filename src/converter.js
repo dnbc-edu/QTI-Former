@@ -94,6 +94,9 @@ export async function convertDocxToQtiHtml(arrayBuffer) {
  * uses a heuristic approach. 
  */
 export function parseHtmlToQuestions(htmlString) {
+    // Convert soft line breaks (<br>) into separate paragraphs so options aren't merged with questions
+    htmlString = htmlString.replace(/<br\s*\/?>/gi, '</p><p>');
+    
     const parser = new DOMParser();
     const doc = parser.parseFromString(htmlString, 'text/html');
     
