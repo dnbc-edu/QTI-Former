@@ -105,7 +105,8 @@ export function parseHtmlToQuestions(htmlString) {
 
     // Get all block-level elements that usually contain text in document order
     const elements = Array.from(doc.body.querySelectorAll('p, h1, h2, h3, h4, h5, h6, li, td'))
-        .filter(el => !el.matches('p') || !el.closest('li, td'));
+        .filter(el => !['LI', 'TD'].includes(el.tagName) ||
+            !Array.from(el.children).some(child => child.tagName === 'P'));
 
     for (let i = 0; i < elements.length; i++) {
         const el = elements[i];
@@ -127,11 +128,12 @@ export function parseHtmlToQuestions(htmlString) {
         const match = plainText.match(isOptionRegex);
         
         // If it's an LI but it contains another list, it's definitely a question, not an option.
-        const hasNestedList = el.querySelector('ol, ul') !== null;
+        const containingListItem = el.closest('li');
+        const hasNestedList = containingListItem?.querySelector('ol, ul') !== null;
         
         // We consider it an option if it explicitly matches letter formatting OR 
         // if it's a list item that does NOT contain a nested list.
-        const isOption = match || (el.tagName === 'LI' && !hasNestedList);
+        const isOption = match || (containingListItem && !hasNestedList);
         
         if (isOption && currentQuestion) {
             // HACK: If this is the very first option of the very first question,
@@ -197,7 +199,7 @@ export function parseHtmlToQuestions(htmlString) {
                 isCorrect = el.querySelector('strong') !== null || 
                             el.querySelector('b') !== null || 
                             el.querySelector('em') !== null || 
-                            plainText.includes('*');
+                            plainText.trimStart().startsWith('*');
                             
                 if (plainText.startsWith('*')) {
                     // Strip asterisk from HTML

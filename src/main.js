@@ -2,6 +2,7 @@ import { sanitizeHtml } from './sanitize-html.js';
 
 let currentFile = null;
 let parsedQuestions = [];
+let processingRequestId = 0;
 
 // DOM Elements
 const dropzone = document.getElementById('dropzone');
@@ -63,6 +64,7 @@ exportBtn.addEventListener('click', handleExport);
 
 function handleFileSelect(file) {
     if (file.name.toLowerCase().endsWith('.docx')) {
+        const requestId = ++processingRequestId;
         currentFile = file;
         fileNameDisplay.textContent = file.name;
         dropzone.classList.add('hidden');
@@ -72,13 +74,14 @@ function handleFileSelect(file) {
         parsedQuestions = [];
         
         // Automatically parse the document upon selection
-        processDocument();
+        processDocument(file, requestId);
     } else {
         showToast("Please upload a .docx file.", "error");
     }
 }
 
 function resetState() {
+    processingRequestId++;
     currentFile = null;
     parsedQuestions = [];
     fileInput.value = '';
@@ -88,8 +91,7 @@ function resetState() {
     previewSection.classList.add('hidden');
 }
 
-function processDocument() {
-    if (!currentFile) return;
+function processDocument(file, requestId) {
 
     showToast("Parsing document...", "success");
 
@@ -102,6 +104,7 @@ function processDocument() {
             // 1. Convert DOCX to HTML using Mammoth
             const { convertDocxToQtiHtml, parseHtmlToQuestions } = await import('./converter.js');
             const { html, mathMap } = await convertDocxToQtiHtml(arrayBuffer);
+            if (requestId !== processingRequestId) return;
             
             // 2. Parse the HTML into structured questions
             parsedQuestions = parseHtmlToQuestions(html);
@@ -125,8 +128,13 @@ function processDocument() {
             showToast("Error processing document. Check console for details.", "error");
         }
     };
+    reader.onerror = () => {
+        if (requestId === processingRequestId) {
+            showToast("Unable to read the selected document.", "error");
+        }
+    };
     
-    reader.readAsArrayBuffer(currentFile);
+    reader.readAsArrayBuffer(file);
 }
 
 function renderPreview(questions, rawHtml) {
@@ -203,6 +211,7 @@ function renderPreview(questions, rawHtml) {
             radio.type = 'radio';
             radio.name = `q_${idx}_correct`;
             radio.checked = opt.isCorrect;
+            radio.setAttribute('aria-label', `Mark option ${optIdx + 1} as the correct answer`);
             
             const radioCustom = document.createElement('span');
             radioCustom.className = 'radio-custom';
@@ -244,8 +253,17 @@ function renderPreview(questions, rawHtml) {
     previewSection.classList.remove('hidden');
 
     // Tell MathJax to typeset the newly added MathML elements
-    if (window.MathJax) {
-        window.MathJax.typesetPromise([previewContainer]).catch((err) => console.log('MathJax error:', err));
+    typesetMath(previewContainer);
+}
+
+function typesetMath(container) {
+    const typeset = () => window.MathJax?.typesetPromise?.([container])
+        .catch((error) => console.error('MathJax error:', error));
+
+    if (window.MathJax?.typesetPromise) {
+        typeset();
+    } else {
+        window.addEventListener('load', typeset, { once: true });
     }
 }
 

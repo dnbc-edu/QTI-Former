@@ -30,3 +30,5 @@ npm run dev
 npm run build
 npm test
 ```
+
+To deploy from a different base path, set `VITE_BASE_PATH` when building. For example, use `VITE_BASE_PATH=/ npm run build` to deploy at a custom domain root.
