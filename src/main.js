@@ -1,5 +1,4 @@
-import { convertDocxToQtiHtml, parseHtmlToQuestions } from './converter.js';
-import { generateQTIPackage } from './qti-generator.js';
+import { sanitizeHtml } from './sanitize-html.js';
 
 let currentFile = null;
 let parsedQuestions = [];
@@ -41,6 +40,13 @@ dropzone.addEventListener('drop', (e) => {
 
 dropzone.addEventListener('click', () => {
     fileInput.click();
+});
+
+dropzone.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        fileInput.click();
+    }
 });
 
 fileInput.addEventListener('change', (e) => {
@@ -94,6 +100,7 @@ function processDocument() {
             const arrayBuffer = event.target.result;
             
             // 1. Convert DOCX to HTML using Mammoth
+            const { convertDocxToQtiHtml, parseHtmlToQuestions } = await import('./converter.js');
             const { html, mathMap } = await convertDocxToQtiHtml(arrayBuffer);
             
             // 2. Parse the HTML into structured questions
@@ -102,9 +109,9 @@ function processDocument() {
             // 3. Restore MathML strings into the parsed questions
             parsedQuestions.forEach(q => {
                 mathMap.forEach((mathmlString, mathId) => {
-                    q.text = q.text.replace(mathId, mathmlString);
+                    q.text = q.text.replaceAll(mathId, mathmlString);
                     q.options.forEach(opt => {
-                        opt.text = opt.text.replace(mathId, mathmlString);
+                        opt.text = opt.text.replaceAll(mathId, mathmlString);
                     });
                 });
             });
@@ -155,11 +162,12 @@ function renderPreview(questions, rawHtml) {
         qLabel.textContent = `Q${idx + 1}: `;
         
         const qContent = document.createElement('span');
-        qContent.innerHTML = q.text;
+        qContent.innerHTML = sanitizeHtml(q.text);
         qContent.contentEditable = true;
         qContent.className = 'editable-text';
         qContent.addEventListener('input', () => {
-            q.text = qContent.innerHTML;
+            q.text = sanitizeHtml(qContent.innerHTML);
+            if (qContent.innerHTML !== q.text) qContent.innerHTML = q.text;
         });
 
         qText.appendChild(qLabel);
@@ -218,9 +226,10 @@ function renderPreview(questions, rawHtml) {
             const textContent = document.createElement('div');
             textContent.className = 'option-content editable-text';
             textContent.contentEditable = true;
-            textContent.innerHTML = opt.text;
+            textContent.innerHTML = sanitizeHtml(opt.text);
             textContent.addEventListener('input', () => {
-                opt.text = textContent.innerHTML;
+                opt.text = sanitizeHtml(textContent.innerHTML);
+                if (textContent.innerHTML !== opt.text) textContent.innerHTML = opt.text;
             });
 
             optItem.appendChild(radioWrapper);
@@ -240,10 +249,19 @@ function renderPreview(questions, rawHtml) {
     }
 }
 
-function handleExport() {
+async function handleExport() {
     if (parsedQuestions.length > 0 && currentFile) {
-        generateQTIPackage(parsedQuestions, currentFile.name);
-        showToast("QTI Package generated successfully!");
+        exportBtn.disabled = true;
+        try {
+            const { generateQTIPackage } = await import('./qti-generator.js');
+            await generateQTIPackage(parsedQuestions, currentFile.name);
+            showToast("QTI Package generated successfully!");
+        } catch (error) {
+            console.error(error);
+            showToast(error.message || "Error generating QTI package.", "error");
+        } finally {
+            exportBtn.disabled = false;
+        }
     }
 }
 

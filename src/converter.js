@@ -104,7 +104,8 @@ export function parseHtmlToQuestions(htmlString) {
     let currentQuestion = null;
 
     // Get all block-level elements that usually contain text in document order
-    const elements = Array.from(doc.body.querySelectorAll('p, h1, h2, h3, h4, h5, h6, li, td'));
+    const elements = Array.from(doc.body.querySelectorAll('p, h1, h2, h3, h4, h5, h6, li, td'))
+        .filter(el => !el.matches('p') || !el.closest('li, td'));
 
     for (let i = 0; i < elements.length; i++) {
         const el = elements[i];

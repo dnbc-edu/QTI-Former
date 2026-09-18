@@ -9,6 +9,12 @@ QTI-Former is a completely client-side browser tool that converts standard Word 
 - **OMML Math Support**: Uses an XSLT transformation pipeline to convert Microsoft Word Equations (OMML) into standard MathML.
 - **Interactive Editing**: Review and edit parsed questions directly in the browser UI before generating the ZIP package.
 
+## Document format
+
+QTI-Former imports multiple-choice questions. Put each question in its own paragraph, followed by its options. Options may use `A.`, `A)`, `(A)`, or Word list formatting. Mark exactly one correct option by making it bold or italic, prefixing it with `*`, or including `{{ANS}}`.
+
+Review the parsed preview before downloading. Complex nested lists, non-multiple-choice questions, and unconventional Word layouts may require manual correction.
+
 ## Development
 
 Built using Vanilla JS and Vite.
@@ -22,4 +28,5 @@ npm run dev
 
 # Build for production
 npm run build
+npm test
 ```

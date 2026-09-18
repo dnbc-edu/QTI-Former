@@ -2,15 +2,11 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>QTI-Former | DOCX to Canvas XML</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Google AdSense -->
-    <meta name="google-adsense-account" content="ca-pub-2781323856416463">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2781323856416463" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="./src/style.css">
     <!-- MathJax for rendering MathML extracted from OMML -->
     <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
@@ -21,7 +17,7 @@
       <header class="hero" style="display: flex; flex-direction: column; align-items: center;">
         <h1>QTI-Former</h1>
         <p>Drag and drop your DOCX file to automatically convert it into a Canvas-compatible QTI 1.2 zip package, completely in your browser.</p>
-        <a href="/QTI-Former/QTI-Former-Sample.docx" download class="btn btn-secondary" style="display: inline-flex; align-items: center; gap: 0.5rem; margin-top: 1.5rem; text-decoration: none; font-size: 0.95rem; padding: 0.6rem 1.2rem; border: 1px solid var(--border-color); border-radius: var(--radius-md); color: var(--text-main); background: white;">
+        <a href="./QTI-Former-Sample.docx" download class="btn btn-secondary" style="display: inline-flex; align-items: center; gap: 0.5rem; margin-top: 1.5rem; text-decoration: none; font-size: 0.95rem; padding: 0.6rem 1.2rem; border: 1px solid var(--border-color); border-radius: var(--radius-md); color: var(--text-main); background: white;">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
           Download Sample Template
         </a>
@@ -29,7 +25,7 @@
 
       <main class="main-content">
         <section class="upload-section" id="uploadSection">
-          <div class="dropzone" id="dropzone">
+          <div class="dropzone" id="dropzone" role="button" tabindex="0" aria-label="Upload a DOCX file">
             <div class="upload-icon">
               <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
             </div>
@@ -40,7 +36,7 @@
           
           <div class="file-info hidden" id="fileInfo">
             <span class="file-name" id="fileName">document.docx</span>
-            <button class="btn-icon" id="removeFile" title="Remove file">
+            <button class="btn-icon" id="removeFile" title="Remove file" aria-label="Remove uploaded file">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
             </button>
           </div>
@@ -67,21 +63,6 @@
           </div>
         </section>
 
-        <!-- Google AdSense Ad Unit -->
-        <div class="ad-container" style="margin: 2rem 0; text-align: center; min-height: 90px;">
-            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2781323856416463" crossorigin="anonymous"></script>
-            <!-- QTI-Former -->
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-2781323856416463"
-                 data-ad-slot="4542614302"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-        </div>
-        
         <section class="preview-section hidden" id="previewSection">
             <div class="section-header" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
                 <div style="display: flex; align-items: center; gap: 1rem;">
@@ -109,7 +90,7 @@
       
       <footer>
         <p>QTI-Former uses client-side processing. Your files are not uploaded to any server.</p>
-        <p style="margin-top: 0.5rem; font-size: 0.8rem; line-height: 1.4;">&copy; 2026 Dhon Niño B. Canela, Melissa R. Serrano, Hannah Shamira P. Santonil, Hannah A. Balmes, Lorella Joy P. Marino, Gervin S. Espinosa, Danielle Joseph H. Buban, Jessa Mae A. Gomez, Uzziel Abib P. Gabiola, Rodher V. Sedeño. <br>Released under the <a href="https://github.com/dnbc-edu/QTI-Former/blob/main/LICENSE" target="_blank" style="color: var(--primary-color); text-decoration: none;">MIT License</a>.</p>
+        <p style="margin-top: 0.5rem; font-size: 0.8rem; line-height: 1.4;">&copy; 2026 Dhon Niño B. Canela, Melissa R. Serrano, Hannah Shamira P. Santonil, Hannah A. Balmes, Lorella Joy P. Marino, Gervin S. Espinosa, Danielle Joseph H. Buban, Jessa Mae A. Gomez, Uzziel Abib P. Gabiola, Rodher V. Sedeño. <br>Released under the <a href="https://github.com/dnbc-edu/QTI-Former/blob/main/LICENSE" target="_blank" rel="noopener noreferrer" style="color: var(--primary-color); text-decoration: none;">MIT License</a>.</p>
       </footer>
     </div>
     
