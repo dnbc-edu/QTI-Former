@@ -17,18 +17,13 @@ Review the parsed preview before downloading. Complex nested lists, non-multiple
 
 ## Development
 
-Built using Vanilla JS and Vite.
+QTI-Former is built using **Vanilla JavaScript and Native ES Modules**. There is no build step or bundler required to run the application.
 
 ```bash
-# Install dependencies
-npm install
-
-# Run development server
-npm run dev
-
-# Build for production
-npm run build
-npm test
+# Serve locally using any static file server
+python3 -m http.server 8000
+# or
+npx serve .
 ```
 
-To deploy from a different base path, set `VITE_BASE_PATH` when building. For example, use `VITE_BASE_PATH=/ npm run build` to deploy at a custom domain root.
+To deploy, simply host the project files on any static web server or GitHub Pages.
