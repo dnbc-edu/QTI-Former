@@ -1,4 +1,4 @@
-import DOMPurify from 'https://cdn.jsdelivr.net/npm/dompurify@3.0.5/dist/purify.es.mjs';
+import DOMPurify from 'https://esm.sh/dompurify@3.0.5';
 
 const sanitizeConfig = {
     USE_PROFILES: { html: true, mathMl: true },

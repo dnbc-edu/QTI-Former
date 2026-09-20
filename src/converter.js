@@ -1,5 +1,5 @@
-import mammoth from 'https://cdn.skypack.dev/mammoth';
-import JSZip from 'https://cdn.skypack.dev/jszip';
+import mammoth from 'https://esm.sh/mammoth@1.8.0';
+import JSZip from 'https://esm.sh/jszip@3.10.1';
 
 async function preprocessDocx(arrayBuffer) {
   const zip = new JSZip();

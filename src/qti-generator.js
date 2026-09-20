@@ -1,5 +1,6 @@
-import JSZip from 'https://cdn.skypack.dev/jszip';
-import { saveAs } from 'https://cdn.skypack.dev/file-saver';
+import JSZip from 'https://esm.sh/jszip@3.10.1';
+import fileSaver from 'https://esm.sh/file-saver@2.0.5';
+const { saveAs } = fileSaver;
 import { sanitizeHtml } from './sanitize-html.js';
 import { generateAssessmentTest, generateManifest } from './qti-xml.js';
 
