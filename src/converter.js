@@ -15,53 +15,61 @@ async function preprocessDocx(arrayBuffer) {
   const parser = new DOMParser();
   const doc = parser.parseFromString(xmlString, "application/xml");
 
-  const xsltResponse = await fetch('./src/xsd/OMML2MML.XSL');
-  const ommlXsltRaw = await xsltResponse.text();
-
-  const xsltDoc = parser.parseFromString(ommlXsltRaw, "application/xml");
-  const xsltProcessor = new XSLTProcessor();
-  xsltProcessor.importStylesheet(xsltDoc);
-
-  const mathMap = new Map();
+  let mathMap = new Map();
   let mathCounter = 0;
 
-  // Find all <m:oMath> nodes
-  const mathNodes = Array.from(doc.getElementsByTagName("m:oMath"));
+  if (typeof XSLTProcessor !== 'undefined') {
+    try {
+      const xsltResponse = await fetch('./src/xsd/OMML2MML.XSL');
+      const ommlXsltRaw = await xsltResponse.text();
 
-  for (const mathNode of mathNodes) {
-    const resultFragment = xsltProcessor.transformToFragment(mathNode, document);
-    
-    if (resultFragment) {
-      const div = document.createElement("div");
-      div.appendChild(resultFragment);
-      
-      // Wrap the generated MathML in the standard <math> tag
-      const mathmlString = `<math xmlns="http://www.w3.org/1998/Math/MathML">${div.innerHTML}</math>`;
-      const mathId = `[[MATH_${mathCounter++}]]`;
-      mathMap.set(mathId, mathmlString);
+      const xsltDoc = parser.parseFromString(ommlXsltRaw, "application/xml");
+      const xsltProcessor = new XSLTProcessor();
+      xsltProcessor.importStylesheet(xsltDoc);
 
-      // Create a plain text w:t node with the placeholder
-      const wNamespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main";
-      const runNode = doc.createElementNS(wNamespace, "w:r");
-      const textNode = doc.createElementNS(wNamespace, "w:t");
-      textNode.textContent = mathId;
-      runNode.appendChild(textNode);
-      
-      // Replace the math node
-      if (mathNode.parentNode) {
-          mathNode.parentNode.replaceChild(runNode, mathNode);
+      // Find all <m:oMath> nodes
+      const mathNodes = Array.from(doc.getElementsByTagName("m:oMath"));
+
+      for (const mathNode of mathNodes) {
+        const resultFragment = xsltProcessor.transformToFragment(mathNode, document);
+        
+        if (resultFragment) {
+          const div = document.createElement("div");
+          div.appendChild(resultFragment);
+          
+          // Wrap the generated MathML in the standard <math> tag
+          const mathmlString = `<math xmlns="http://www.w3.org/1998/Math/MathML">${div.innerHTML}</math>`;
+          const mathId = `[[MATH_${mathCounter++}]]`;
+          mathMap.set(mathId, mathmlString);
+
+          // Create a plain text w:t node with the placeholder
+          const wNamespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main";
+          const runNode = doc.createElementNS(wNamespace, "w:r");
+          const textNode = doc.createElementNS(wNamespace, "w:t");
+          textNode.textContent = mathId;
+          runNode.appendChild(textNode);
+          
+          // Replace the math node
+          if (mathNode.parentNode) {
+            mathNode.parentNode.replaceChild(runNode, mathNode);
+          }
+        }
       }
+
+      // Serialize back to string if we replaced things
+      if (mathNodes.length > 0) {
+        const modifiedXmlString = new XMLSerializer().serializeToString(doc);
+        zip.file("word/document.xml", modifiedXmlString);
+      }
+    } catch (err) {
+      console.warn("OMML to MathML XSLT parsing failed or is unsupported:", err);
     }
+  } else {
+    console.warn("XSLTProcessor is not supported in this browser. Skipping OMML to MathML conversion.");
   }
 
-  const serializer = new XMLSerializer();
-  const newXmlString = serializer.serializeToString(doc);
-
-  zip.file("word/document.xml", newXmlString);
-
-  const patchedBuffer = await zip.generateAsync({ type: "arraybuffer" });
-  
-  return { buffer: patchedBuffer, mathMap };
+  const modifiedBuffer = await zip.generateAsync({type: "arraybuffer"});
+  return { buffer: modifiedBuffer, mathMap };
 }
 
 export async function convertDocxToQtiHtml(arrayBuffer) {

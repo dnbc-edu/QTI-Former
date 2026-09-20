@@ -121,7 +121,7 @@ function processDocument(file, requestId) {
             showToast("Document parsed successfully!");
         } catch (error) {
             console.error(error);
-            showToast("Error processing document. Check console for details.", "error");
+            showToast(`Error processing document: ${error.message || 'Unknown error'}`, "error");
         }
     };
     reader.onerror = () => {
