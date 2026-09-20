@@ -101,9 +101,9 @@ function processDocument(file, requestId) {
             // 3. Restore MathML strings into the parsed questions
             parsedQuestions.forEach(q => {
                 mathMap.forEach((mathmlString, mathId) => {
-                    q.text = q.text.replaceAll(mathId, mathmlString);
+                    q.text = q.text.split(mathId).join(mathmlString);
                     q.options.forEach(opt => {
-                        opt.text = opt.text.replaceAll(mathId, mathmlString);
+                        opt.text = opt.text.split(mathId).join(mathmlString);
                     });
                 });
             });
