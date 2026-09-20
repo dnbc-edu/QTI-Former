@@ -39,17 +39,6 @@ dropzone.addEventListener('drop', (e) => {
     }
 });
 
-dropzone.addEventListener('click', () => {
-    fileInput.click();
-});
-
-dropzone.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        fileInput.click();
-    }
-});
-
 fileInput.addEventListener('change', (e) => {
     if (e.target.files.length > 0) {
         handleFileSelect(e.target.files[0]);
