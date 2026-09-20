@@ -1,6 +1,5 @@
-import mammoth from 'mammoth';
-import JSZip from 'jszip';
-import ommlXsltRaw from './xsd/OMML2MML.XSL?raw';
+import mammoth from 'https://cdn.skypack.dev/mammoth';
+import JSZip from 'https://cdn.skypack.dev/jszip';
 
 async function preprocessDocx(arrayBuffer) {
   const zip = new JSZip();
@@ -15,6 +14,9 @@ async function preprocessDocx(arrayBuffer) {
   
   const parser = new DOMParser();
   const doc = parser.parseFromString(xmlString, "application/xml");
+
+  const xsltResponse = await fetch('./src/xsd/OMML2MML.XSL');
+  const ommlXsltRaw = await xsltResponse.text();
 
   const xsltDoc = parser.parseFromString(ommlXsltRaw, "application/xml");
   const xsltProcessor = new XSLTProcessor();

@@ -1,8 +1,5 @@
-import JSZip from 'jszip';
-import { saveAs } from 'file-saver';
-import imscpXsd from './xsd/imscp_v1p1.xsd?raw';
-import imsmdXsd from './xsd/imsmd_v1p2p2.xsd?raw';
-import qtiasiXsd from './xsd/ims_qtiasiv1p2p1.xsd?raw';
+import JSZip from 'https://cdn.skypack.dev/jszip';
+import { saveAs } from 'https://cdn.skypack.dev/file-saver';
 import { sanitizeHtml } from './sanitize-html.js';
 import { generateAssessmentTest, generateManifest } from './qti-xml.js';
 
@@ -13,8 +10,22 @@ import { generateAssessmentTest, generateManifest } from './qti-xml.js';
  */
 export async function generateQTIPackage(questions, filename) {
     const zip = new JSZip();
+    const manifestId = `i${Math.random().toString(36).substr(2, 9)}`;
+    const quizId = `q_${Math.random().toString(36).substr(2, 9)}`;
+
+    // Add necessary XSD schemas directly to the zip
+    const imscpReq = await fetch('./src/xsd/imscp_v1p1.xsd');
+    const imscpXsd = await imscpReq.text();
+    zip.file("imscp_v1p1.xsd", imscpXsd);
+
+    const imsmdReq = await fetch('./src/xsd/imsmd_v1p2p2.xsd');
+    const imsmdXsd = await imsmdReq.text();
+    zip.file("imsmd_v1p2p2.xsd", imsmdXsd);
+
+    const qtiasiReq = await fetch('./src/xsd/ims_qtiasiv1p2p1.xsd');
+    const qtiasiXsd = await qtiasiReq.text();
+    zip.file("ims_qtiasiv1p2p1.xsd", qtiasiXsd);
     
-    const quizId = 'quiz_' + Math.random().toString(36).substr(2, 9);
     const title = filename.replace(/\.docx$/i, '') || 'Imported Quiz';
     const exportQuestions = questions.map(question => ({
         ...question,
