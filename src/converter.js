@@ -94,11 +94,9 @@ export async function convertDocxToQtiHtml(arrayBuffer) {
  * uses a heuristic approach. 
  */
 export function parseHtmlToQuestions(htmlString) {
-    // Convert soft line breaks (<br>) into separate paragraphs so options aren't merged with questions
-    htmlString = htmlString.replace(/<br\s*\/?>/gi, '</p><p>');
-    
     const parser = new DOMParser();
     const doc = parser.parseFromString(htmlString, 'text/html');
+    splitParagraphsAtLineBreaks(doc);
     
     const questions = [];
     let currentQuestion = null;
@@ -250,4 +248,21 @@ export function parseHtmlToQuestions(htmlString) {
     }
 
     return questions;
+}
+
+function splitParagraphsAtLineBreaks(doc) {
+    const lineBreaks = Array.from(doc.body.querySelectorAll('p > br'));
+
+    lineBreaks.forEach(lineBreak => {
+        const paragraph = lineBreak.parentElement;
+        if (!paragraph?.isConnected) return;
+
+        const continuation = doc.createElement('p');
+        while (lineBreak.nextSibling) {
+            continuation.appendChild(lineBreak.nextSibling);
+        }
+
+        lineBreak.remove();
+        paragraph.after(continuation);
+    });
 }
