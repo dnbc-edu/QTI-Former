@@ -80,6 +80,7 @@ body {
 }
 
 .dropzone {
+  display: block;
   position: relative;
   border: 2px dashed var(--border-color);
   border-radius: var(--radius-md);
